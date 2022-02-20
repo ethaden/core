@@ -888,7 +888,11 @@ async def test_auth_provider_config(hass):
             {"type": "homeassistant"},
             {"type": "legacy_api_password", "api_password": "some-pass"},
         ],
-        CONF_AUTH_MFA_MODULES: [{"type": "totp"}, {"type": "totp", "id": "second"}],
+        CONF_AUTH_MFA_MODULES: [
+            {"type": "totp"},
+            {"type": "totp", "id": "second"},
+            {"type": "webauthn_totp", "id": "third"},
+        ],
     }
     if hasattr(hass, "auth"):
         del hass.auth
@@ -900,6 +904,7 @@ async def test_auth_provider_config(hass):
     assert len(hass.auth.auth_mfa_modules) == 2
     assert hass.auth.auth_mfa_modules[0].id == "totp"
     assert hass.auth.auth_mfa_modules[1].id == "second"
+    assert hass.auth.auth_mfa_modules[2].id == "webauthn_totp"
 
 
 async def test_auth_provider_config_default(hass):
@@ -920,6 +925,7 @@ async def test_auth_provider_config_default(hass):
     assert hass.auth.auth_providers[0].type == "homeassistant"
     assert len(hass.auth.auth_mfa_modules) == 1
     assert hass.auth.auth_mfa_modules[0].id == "totp"
+    assert hass.auth.auth_mfa_modules[1].id == "webauthn_totp"
 
 
 async def test_disallowed_auth_provider_config(hass):

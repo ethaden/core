@@ -507,7 +507,14 @@ async def async_process_ha_core_config(hass: HomeAssistant, config: dict) -> Non
 
         mfa_conf = config.get(
             CONF_AUTH_MFA_MODULES,
-            [{"type": "totp", "id": "totp", "name": "Authenticator app"}],
+            [
+                {"type": "totp", "id": "totp", "name": "Authenticator app"},
+                {
+                    "type": "webauthn_totp",
+                    "id": "webauthn_totp",
+                    "name": "Webauthn and Authenticator app",
+                },
+            ],
         )
 
         setattr(
